@@ -56,13 +56,13 @@ fun main(){
 }
 
 fun determineDigit(){
-    println("1~10桁の数字を入力してください")
-    digitlimit = "10" //桁数の上限を5に設定
+    digitlimit = "6" //桁数の上限を設定
+    println("${digitlimit} 桁までの数字を入力してください")
 }
 
 // 正解の数をランダムに選択し、正解の中にどの数が何個あるのかをカウント
 fun determineRand(){
-    digitofans = max(1,(random()*digitlimit.toInt()+1).toInt())//digitofans にはランダムに選ばれた答えの桁数
+    digitofans = max(3,(random()*digitlimit.toInt()+1).toInt())//digitofans にはランダムに選ばれた答えの桁数
 
     for (i in 1..digitofans) digittemp*=10L //digittempは桁数が正しく100..となっている仮置きの数
     //ランダムに選ばれた数を左から0埋めパディングしたものがrandnumber
