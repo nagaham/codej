@@ -29,7 +29,7 @@ fun main(){
     while(inputnumber != randnumber) {//正解するまで繰り返す
         println("$numoftrials 回目のトライアルが終わりました")
         numoftrials++ //試行回数をカウントする
-        for(n in 0 .. 9) countofyournumber[n] = inputnumber.count{ it == (n+48).toChar() }//inputnumberの中に0~9までの数字がそれぞれ何個あるのかを判定
+        countOfNumCorrectClose()//inputnumberの中に0~9までの数字がそれぞれ何個あるのかを判定
         for(n in 0 .. 9){
             if(min(countofyournumber[n],countofcorrectans[n]) != 0) {
                 discoverynum += "$n"+"を${min(countofyournumber[n],countofcorrectans[n])}個発見 "  //発見した文字列を収納
@@ -37,8 +37,7 @@ fun main(){
             numofcorrect += min(countofyournumber[n], countofcorrectans[n])//文字列の中の文字ごとに数字が何個あるのかをカウントしたものと正解の数字が何個あるのかを比較
         }
 
-        if(inputnumber.length < randnumber.length) inputnumber = inputnumber.padEnd(digitofans,'x')
-        else if(inputnumber.length > randnumber.length) inputnumber = inputnumber.dropLast(inputnumber.length - digitofans)
+        longOrShort()//入力した文字列が正解の文字数よりも長い場合は削り、短い場合はxを付け足す
 
         for (i in 0 until digitofans) {
             if (inputnumber[i] == randnumber[i]) {//入力した文字列と正解の文字列を比較
@@ -47,7 +46,7 @@ fun main(){
             }
         }
         historynumber += " Correct $numofperf  Close ${numofcorrect-numofperf} ... $discoverynum\n"
-        println(historynumber + "入力してください\n" )
+        println("$historynumber\n入力してください ${yourans.joinToString(",").replace(",","").substring(0,randnumber.length)}")
         numofperf = 0
         numofcorrect = 0
         discoverynum = ""
@@ -62,14 +61,21 @@ fun determineDigit(){
     println("${digitlimit} 桁までの数字を入力してください")
 }
 
-// 正解の数をランダムに選択し、正解の中にどの数が何個あるのかをカウント
 fun determineRand(){
-    digitofans = max(3,(random()*digitlimit.toInt()+1).toInt())//digitofans にはランダムに選ばれた答えの桁数
-
+    digitofans = max(5,(random()*digitlimit.toInt()+1).toInt())//digitofans にはランダムに選ばれた答えの桁数
     for (i in 1..digitofans) digittemp*=10L //digittempは桁数が正しくなっている仮置きの数で100..の形式
     //ランダムに選ばれた数を左から0埋めパディングしたものがrandnumber
     randnumber = ((digittemp* random()).toLong()).toString().padStart(digitofans,'0')
-
     //それぞれの文字が何個あるのかをカウントする
     for(n in 0 .. 9) countofcorrectans[n] = randnumber.count{ it == (n+48).toChar() }
-}
+}// 正解の数をランダムに選択し、正解の中にどの数が何個あるのかをカウント
+
+fun countOfNumCorrectClose(){
+    for(n in 0 .. 9) countofyournumber[n] = inputnumber.count{ it == (n+48).toChar() }
+}//inputnumberの中に0~9までの数字がそれぞれ何個あるのかを判定
+
+fun longOrShort(){
+    if(inputnumber.length < randnumber.length) inputnumber = inputnumber.padEnd(digitofans,'x')
+    else if(inputnumber.length > randnumber.length) inputnumber = inputnumber.dropLast(inputnumber.length - digitofans)
+}//入力した文字列が正解の文字数よりも長い場合は削り、短い場合はxを付け足す
+
